@@ -3,7 +3,7 @@ Amazon X WiCyS CTF writeup
 I completed 3 challenges: recon 1 and 2, and web 1. I worked on but did not complete reverse engineering 1, web 2, cryptography 1 & 2, and stenography 1.
 I felt fairly rusty after not doing anything computer related over the summer. I was also distracted by working on getting registered for DSA during the event.
 
-Recon 1\n
+Recon 1/n
 This task involved finding a bad actor by their username somewhere on the internet. At first I tried googling the username but it didn’t work. Then I used a person search tool, since the username seemed like a regular name. It also didn’t work. Finally, I used a tool to search for usernames on various websites, and it found a number of hits. The first one I checked was on Twitter, which was indeed the bad actor.
 
 Recon 2
