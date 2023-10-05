@@ -2,7 +2,7 @@
 If a user is authenticated but not authorized to access a web page, it means that the web server has confirmed the identity of the user, but that user doesn't have permission to access the web page in question.
 ### If I have a six-character password consisting of uppercase (English) letters and (decimal) digits only, how many seconds might it take an adversary to crack, assuming they make one attempt per second?
 2176782336
-## Humor us for a moment, and play The Password Game, trying to get through at least Rule 12.
+### Humor us for a moment, and play The Password Game, trying to get through at least Rule 12.
 
 ### While obviously the game itself is in many ways meant to be humorous, it also critiques the experience many of us have setting up new passwords. Explain how there's a trade-off between usability and security in the context of passwords.
 Many features that enhance the security of a password - such as requiring special characters, numbers, and upper case letters, or having a minimum length - make passwords harder to type and harder to remember. Passwords which are more secure are less usable.
