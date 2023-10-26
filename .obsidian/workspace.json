@@ -44,18 +44,6 @@
             }
           },
           {
-            "id": "d0d1742b64fc9b7f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Internship Opportunities.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "230c8e865ce067a6",
             "type": "leaf",
             "state": {
@@ -67,8 +55,7 @@
               }
             }
           }
-        ],
-        "currentTab": 4
+        ]
       }
     ],
     "direction": "vertical"
@@ -118,8 +105,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "13704ef1e6b00a0b",
@@ -135,7 +121,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CS50 Assignment 2.md",
+                "file": "NCL Practice Game.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -152,7 +138,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CS50 Assignment 2.md",
+                "file": "NCL Practice Game.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -175,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CS50 Assignment 2.md"
+                "file": "NCL Practice Game.md"
               }
             }
           }
@@ -197,10 +183,19 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "230c8e865ce067a6",
+  "active": "298ce8d4e43739b4",
   "lastOpenFiles": [
     "Internship Opportunities.md",
+    "CS50_Assignment_0.md",
     "CS50 Assignment 2.md",
+    "CS50_Assignment_1.md",
+    "NCL Practice Game.md",
+    "NCL Solo Game.md",
+    "Amazon_X_WiCyS_CTF_writeup.md",
+    "Images/Pasted image 20231009115245.png",
+    "Images",
+    "Hack.lu.md",
+    "Config notes.md",
     "new/CS50_Assignment_1.md",
     "new/CS50_Assignment_0.md",
     "new/Amazon_X_WiCyS_CTF_writeup.md",
@@ -208,19 +203,15 @@
     "github_folder",
     "New folder",
     "Cybersec Tools and Resources.md",
-    "Hack.lu.md",
-    "NCL Solo Game.md",
-    "Pasted image 20231020112309.png",
-    "Pasted image 20231020111736.png",
-    "Pasted image 20231020111639.png",
-    "Pasted image 20231020110955.png",
-    "Pasted image 20231020104025.png",
-    "Pasted image 20231020102545.png",
-    "Pasted image 20231020102138.png",
-    "Pasted image 20231014192249.png",
-    "Pasted image 20231014142138.png",
-    "Pasted image 20231014142122.png",
-    "NCL Practice Game.md",
+    "Images/Pasted image 20231020112309.png",
+    "Images/Pasted image 20231020111736.png",
+    "Images/Pasted image 20231020111639.png",
+    "Images/Pasted image 20231020110955.png",
+    "Images/Pasted image 20231020104025.png",
+    "Images/Pasted image 20231020102545.png",
+    "Images/Pasted image 20231020102138.png",
+    "Images/Pasted image 20231014192249.png",
+    "Images/Pasted image 20231014142138.png",
     "Untitled.md"
   ]
 }

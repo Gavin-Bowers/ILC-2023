@@ -37,7 +37,3 @@ A company security team might practice pen testing in order to be able to test t
 ## Of the below HTTP status codes, which most likely suggests that a distributed denial of service (DDoS) attack may be occurring?
 
 ![](https://lh7-us.googleusercontent.com/aItPyOkBWr9G1rmlCbX6UytyrfUG8fcG-5I5RYsNyuEtvHSAiV7EJegSlxv_q43BzJnFVH18KR2deVJ-HdipRG5PiLdeOEYxK0EXWdg8JJLZ7zYKPFqPKRhIqFhehlkCspT1-nsUqY0o4b_j869VrRc)
-
-## How did you find the difficulty of this assignment?
-
-2 / 5
