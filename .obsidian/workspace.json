@@ -13,7 +13,19 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "NCL Practice Game.md",
+                "file": "Hack.lu.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "25e4ad9e438e95bc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Untitled.md",
                 "mode": "source",
                 "source": false
               }
@@ -55,7 +67,8 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -121,7 +134,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "NCL Practice Game.md",
+                "file": "Untitled.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -138,7 +151,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "NCL Practice Game.md",
+                "file": "Untitled.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -161,7 +174,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "NCL Practice Game.md"
+                "file": "Untitled.md"
               }
             }
           }
@@ -183,18 +196,23 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "298ce8d4e43739b4",
+  "active": "25e4ad9e438e95bc",
   "lastOpenFiles": [
+    "Pasted image 20231026120246.png",
+    "Hack.lu.md",
+    "Untitled.md",
+    "Untitled",
+    "Pasted.md",
+    "Cybersec Tools and Resources.md",
     "Internship Opportunities.md",
+    "NCL Practice Game.md",
+    "NCL Solo Game.md",
     "CS50_Assignment_0.md",
     "CS50 Assignment 2.md",
     "CS50_Assignment_1.md",
-    "NCL Practice Game.md",
-    "NCL Solo Game.md",
     "Amazon_X_WiCyS_CTF_writeup.md",
     "Images/Pasted image 20231009115245.png",
     "Images",
-    "Hack.lu.md",
     "Config notes.md",
     "new/CS50_Assignment_1.md",
     "new/CS50_Assignment_0.md",
@@ -202,7 +220,6 @@
     "new",
     "github_folder",
     "New folder",
-    "Cybersec Tools and Resources.md",
     "Images/Pasted image 20231020112309.png",
     "Images/Pasted image 20231020111736.png",
     "Images/Pasted image 20231020111639.png",
@@ -211,7 +228,6 @@
     "Images/Pasted image 20231020102545.png",
     "Images/Pasted image 20231020102138.png",
     "Images/Pasted image 20231014192249.png",
-    "Images/Pasted image 20231014142138.png",
-    "Untitled.md"
+    "Images/Pasted image 20231014142138.png"
   ]
 }
