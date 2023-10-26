@@ -1,6 +1,6 @@
 ## Crypto
 
-### Lucky Numbers (Easy) ✓
+### Lucky Numbers (Easy)
 
 This is the relevant code which takes 2 numbers and determines if the flag will be given to us. The numbers are s and t, which are in the ranges of 20,000-150,000,000,000 and 0-42 respectively.
 
