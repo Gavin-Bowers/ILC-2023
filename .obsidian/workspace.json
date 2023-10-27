@@ -20,12 +20,12 @@
             }
           },
           {
-            "id": "25e4ad9e438e95bc",
+            "id": "7ce000bafd3e000c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Untitled.md",
+                "file": "Fetch the Flag CTF.md",
                 "mode": "source",
                 "source": false
               }
@@ -134,7 +134,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Untitled.md",
+                "file": "Fetch the Flag CTF.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -151,7 +151,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Untitled.md",
+                "file": "Fetch the Flag CTF.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -174,7 +174,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Untitled.md"
+                "file": "Fetch the Flag CTF.md"
               }
             }
           }
@@ -196,11 +196,14 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "25e4ad9e438e95bc",
+  "active": "7ce000bafd3e000c",
   "lastOpenFiles": [
-    "Pasted image 20231026120246.png",
+    "Images/Pasted image 20231027142724.png",
+    "Images/Pasted image 20231027131757.png",
+    "Images/Pasted image 20231027125746.png",
     "Hack.lu.md",
-    "Untitled.md",
+    "Fetch the Flag CTF.md",
+    "Pasted image 20231026120246.png",
     "Untitled",
     "Pasted.md",
     "Cybersec Tools and Resources.md",
@@ -225,9 +228,6 @@
     "Images/Pasted image 20231020111639.png",
     "Images/Pasted image 20231020110955.png",
     "Images/Pasted image 20231020104025.png",
-    "Images/Pasted image 20231020102545.png",
-    "Images/Pasted image 20231020102138.png",
-    "Images/Pasted image 20231014192249.png",
-    "Images/Pasted image 20231014142138.png"
+    "Images/Pasted image 20231020102545.png"
   ]
 }
