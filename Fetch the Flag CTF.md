@@ -64,3 +64,25 @@ def decode(encoded):
 flag = decode("OPhMOnVheP1hRaOa1Pmi1GrBbGm21PRaepxXOPxMeG1iOaYd1ji=") print(flag)
 ```
 
+### Quick Maths
+
+For this challenge, you connect to a server via netcat and must answer math questions. The catch is that you have to answer them very fast. Too fast to do by hand. So, I wrote a python script to do it. The math appears to work, but I wrangled with formatting for way too long before giving up. The issue is that I need to enter something, like newline, to get the next line from the server, but it considers that to be part of my answer, and so my answer is wrong. The math in my program works, but I can't get it to just read the answer. I don't have this issue in netcat, but using python I do. I tried writing a bash script but it had the same problem.
+
+### YSON
+
+This challenge features a website which turns yml into json. I tried escaping the input using a ' and got this error:
+
+Error: while scanning a quoted scalar in "", line 12, column 1: ' ^ found unexpected end of stream in "", line 12, column 2: ' ^
+
+Two quotes gets:
+
+Error: while scanning a simple key in "", line 12, column 1: "" ^ could not find expected ':' in "", line 12, column 3: "" ^
+
+This is a yml parser error apparently
+
+### Beep64
+
+This challenge provides an audio file, says that it uses base64, and asks us to find the flag. Listening to it, it sounds like a series of tones, so it must encode data with tones. After some analysis, it seems like it's DTFM, an old system used by touch-tone telephones. Which explains why it sounds like old phone noises. I found a Python program which can...
+
+
+
