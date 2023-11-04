@@ -110,3 +110,60 @@ But I have no idea how to decrypt it using the sudoku result. ciphers typically 
 ### International
 
 The format I identified as md5crypt. The hashcat mode for this is 500. I need a list of all country names as the dictionary plus a rule for appending and substituting special chars.
+
+I used this command: `hashcat -m 500 -r hashcat/rules/best64.rule hashes5 countries.txt -O`
+
+Which failed to recover any. Clearly I need a different rule. PasswordsPro worked for these 2:
+
+$1$oc$XlSF.JS.mIEo9aNjuTkpM/:Australia&
+$1$as$Qs8SFpCNgI.F7ngAzQyPU0:China@
+
+Revealing that they just have chars at the end. I'll use a mask for the last one
+
+I used `hashcat -m 500 -a 6 hashes5 countries.txt ?s -O` which inexplicably did not work. I'll try a larger ruleset
+
+### WPA
+
+A hash analyzer finds the hashes to be SHA2-256. This is a secure format but we luckily know the format so this should be easy with a mask attack.
+
+Using this mask attack to try all of them at once, using the names as a dictionary and adding 3 numbers, fails to get any. `hashcat -m 1400 -a 6 hashes6 networks.txt ?d?d?d -O`
+
+I think I need to get reasonable snippets of the network names rather than have them in full. I made this list:
+
+```
+FREE_WIFI_TheBigApplePizza
+FREE_WIFI
+TheBigApplePizza
+thebigapplepizza
+TheBigApple
+thebigapple
+CrabShop@CharmCity
+CrabShop
+crabshop
+CharmCity
+charmcity
+CigarCitySandwiches_5G
+CigarCitySandwiches
+CigarCity
+cigarcitysandwiches
+cigarcity
+EmeraldCityCoffee_WIFI
+EmeraldCityCoffee
+EmeraldCity
+Coffee
+emeraldcitycoffee
+emeraldcity
+WIFI
+```
+
+### Monsters
+
+This problem indicates that the passwords are based on pokemon. I happended to already have a list of all pokemon lying around so I used it with the PasswordsPro rule.
+
+I got one:
+$1$??$BwyjozhRr55Cd2QqkC.bE.:UnownUnown
+
+The salt ?? corresponds to unown repeated twice. Maybe for the others which have numbers, each number is a pokedex entry and I need to append them?
+
+
+
