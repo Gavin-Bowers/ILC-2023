@@ -90,9 +90,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "3fea468c9d2ac954",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "conflict-files-obsidian-git.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
         ],
-        "currentTab": 6
+        "currentTab": 7
       }
     ],
     "direction": "vertical"
@@ -158,7 +170,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CS50 Assignment 3.md",
+                "file": "conflict-files-obsidian-git.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -175,7 +187,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CS50 Assignment 3.md",
+                "file": "conflict-files-obsidian-git.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -198,7 +210,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CS50 Assignment 3.md"
+                "file": "conflict-files-obsidian-git.md"
               }
             }
           }
@@ -220,10 +232,17 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0e287a91d96c6a86",
+  "active": "3fea468c9d2ac954",
   "lastOpenFiles": [
-    "CS50 Assignment 2.md",
     "CS50 Assignment 3.md",
+    "conflict-files-obsidian-git.md",
+    "NCL Team Game.md",
+    "Images/draw.py",
+    "Images/Pasted image 20231103170218.png",
+    "Images/Pasted image 20231103162642.png",
+    "Images/Pasted image 20231103153940.png",
+    "Images/Pasted image 20231103142713.png",
+    "CS50 Assignment 2.md",
     "CS50 Assignment 1.md",
     "CS50 Assignment 0.md",
     "MTG notes.md",
@@ -250,10 +269,6 @@
     "new/Amazon_X_WiCyS_CTF_writeup.md",
     "new",
     "github_folder",
-    "New folder",
-    "Images/Pasted image 20231020112309.png",
-    "Images/Pasted image 20231020111736.png",
-    "Images/Pasted image 20231020111639.png",
-    "Images/Pasted image 20231020110955.png"
+    "New folder"
   ]
 }
