@@ -73,14 +73,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CS50 Assignment 1.md",
+                "file": "CS50 Assignment 2.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "0e287a91d96c6a86",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CS50 Assignment 3.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 6
       }
     ],
     "direction": "vertical"
@@ -146,7 +158,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CS50 Assignment 1.md",
+                "file": "CS50 Assignment 3.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -163,7 +175,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CS50 Assignment 1.md",
+                "file": "CS50 Assignment 3.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -186,7 +198,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CS50 Assignment 1.md"
+                "file": "CS50 Assignment 3.md"
               }
             }
           }
@@ -208,10 +220,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "918bcfb01281fa18",
+  "active": "0e287a91d96c6a86",
   "lastOpenFiles": [
-    "CS50 Assignment 0.md",
     "CS50 Assignment 2.md",
+    "CS50 Assignment 3.md",
+    "CS50 Assignment 1.md",
+    "CS50 Assignment 0.md",
     "MTG notes.md",
     "Fetch the Flag CTF.md",
     "NCL Solo Game.md",
@@ -227,7 +241,6 @@
     "Cybersec Tools and Resources.md",
     "Internship Opportunities.md",
     "NCL Practice Game.md",
-    "CS50 Assignment 1.md",
     "Amazon X WiCyS CTF writeup.md",
     "Images/Pasted image 20231009115245.png",
     "Images",
