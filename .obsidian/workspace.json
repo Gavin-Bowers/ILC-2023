@@ -32,18 +32,6 @@
             }
           },
           {
-            "id": "80de42e4ed47c96a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "MTG notes.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "8748f8dddbbf9e87",
             "type": "leaf",
             "state": {
@@ -97,14 +85,14 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "MetaRed CTF.md",
+                "file": "Config notes.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 7
+        "currentTab": 6
       }
     ],
     "direction": "vertical"
@@ -170,7 +158,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "MetaRed CTF.md",
+                "file": "Config notes.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -187,7 +175,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "MetaRed CTF.md",
+                "file": "Config notes.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -210,7 +198,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "MetaRed CTF.md"
+                "file": "Config notes.md"
               }
             }
           }
@@ -234,8 +222,14 @@
   },
   "active": "851a5eb1a020ed21",
   "lastOpenFiles": [
-    "To Do.md",
     "MetaRed CTF.md",
+    "Internship Opportunities.md",
+    "MTG notes.md",
+    "Images/Pasted image 20231031112532.png",
+    "Config notes.md",
+    "Amazon X WiCyS CTF writeup.md",
+    "Hack.lu.md",
+    "To Do.md",
     "Images/Pasted image 20231121094212.png",
     "Images/Pasted image 20231121080046.png",
     "NCL Team Game.md",
@@ -249,22 +243,16 @@
     "CS50 Assignment 2.md",
     "CS50 Assignment 1.md",
     "CS50 Assignment 0.md",
-    "MTG notes.md",
     "Fetch the Flag CTF.md",
     "NCL Solo Game.md",
-    "Hack.lu.md",
-    "Images/Pasted image 20231031112532.png",
     "Images/Pasted image 20231027142724.png",
     "Images/Pasted image 20231027131757.png",
     "Images/Pasted image 20231027125746.png",
     "Untitled",
     "Pasted.md",
     "Cybersec Tools and Resources.md",
-    "Internship Opportunities.md",
     "NCL Practice Game.md",
-    "Amazon X WiCyS CTF writeup.md",
     "Images",
-    "Config notes.md",
     "new/CS50_Assignment_1.md",
     "new/CS50_Assignment_0.md",
     "new/Amazon_X_WiCyS_CTF_writeup.md",
