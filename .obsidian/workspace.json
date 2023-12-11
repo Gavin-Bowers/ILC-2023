@@ -56,43 +56,31 @@
             }
           },
           {
-            "id": "7dbcf05449720e10",
+            "id": "1d597b7471d6ebfc",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "NCL Solo Game.md",
+                "file": "Lotto Final Project Notes.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "230c8e865ce067a6",
+            "id": "aaf1e3e4f19ee8dc",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CS50 Assignment 2.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "0e287a91d96c6a86",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "NCL Team Game.md",
+                "file": "Lotto Final Project Notes.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 5
       }
     ],
     "direction": "vertical"
@@ -158,7 +146,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "NCL Team Game.md",
+                "file": "Lotto Final Project Notes.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -175,7 +163,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "NCL Team Game.md",
+                "file": "Lotto Final Project Notes.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -198,7 +186,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "NCL Team Game.md"
+                "file": "Lotto Final Project Notes.md"
               }
             }
           }
@@ -220,36 +208,38 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0e287a91d96c6a86",
+  "active": "aaf1e3e4f19ee8dc",
   "lastOpenFiles": [
-    "CS50 Assignment 3.md",
-    "conflict-files-obsidian-git.md",
+    "Misc Lotto Notes.md",
+    "Lotto Final Project Notes.md",
+    "Images/toomanyfunctions.png",
+    "Images/Pasted image 20231209184155.png",
+    "Hack.lu.md",
+    "NCL Solo Game.md",
+    "Amazon X WiCyS CTF writeup.md",
     "NCL Team Game.md",
+    "Images/Pasted image 20231209180110.png",
+    "Images/Pasted image 20231209175929.png",
+    "Images/Pasted image 20231209175106.png",
+    "Images/Pasted image 20231209173512.png",
+    "Images/lotto1.png",
+    "Images/Pasted image 20231209172453.png",
+    "Images/Pasted image 20231209172331.png",
+    "Images/Pasted image 20231209153440.png",
+    "To Do.md",
+    "Fetch the Flag CTF.md",
+    "Cybersec Tools and Resources.md",
+    "Lake CTF.md",
+    "CS50 Assignment 3.md",
     "Images/draw.py",
-    "Images/Pasted image 20231103170218.png",
-    "Images/Pasted image 20231103162642.png",
-    "Images/Pasted image 20231103153940.png",
-    "Images/Pasted image 20231103142713.png",
-    "CS50 Assignment 2.md",
     "CS50 Assignment 1.md",
     "CS50 Assignment 0.md",
+    "CS50 Assignment 2.md",
     "MTG notes.md",
-    "Fetch the Flag CTF.md",
-    "NCL Solo Game.md",
-    "Hack.lu.md",
-    "Images/Pasted image 20231031112532.png",
-    "To Do.md",
-    "Images/Pasted image 20231027142724.png",
-    "Images/Pasted image 20231027131757.png",
-    "Images/Pasted image 20231027125746.png",
-    "Pasted image 20231026120246.png",
     "Untitled",
     "Pasted.md",
-    "Cybersec Tools and Resources.md",
     "Internship Opportunities.md",
     "NCL Practice Game.md",
-    "Amazon X WiCyS CTF writeup.md",
-    "Images/Pasted image 20231009115245.png",
     "Images",
     "Config notes.md",
     "new/CS50_Assignment_1.md",
