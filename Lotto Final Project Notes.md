@@ -1,85 +1,51 @@
-The application I'm trying to reverse engineer is lotto.exe. This application opens a window which asks you to enter a lottery ticket. The goal is to enter the winning ticket. This challenge is quite hard. The lotto.exe file is a very large x86 assembly file with considerable complexity. My former teacher said that it took them the better part of a week. So, I think this is a reasonable conclusion to the hacking I've been doing this quarter.
+For my final project I set out to complete the Lotto.exe challenge from SkidCTF. This challenge is a reverse engineering challenge which is ranked as very hard. My former teacher said it took them the better part of a week. It's a challenge which I was not sure I could complete, going into it.
 ### Setup
 
-I first installed a C toolchain with MinGW so that I could play around with C compilation. This will help me reason about the relationship between C and assembly. I got a little confused by the proliferation of different toolchains for C compilation on Windows, but I followed the recommendation of the C/C++ extension for VSCode and used MinGW. I continue to be baffled that many applications on Windows require you to add them to the PATH manually.
+I installed a C toolchain with MinGW so that I could play around with C compilation. I figured it would help me reason about the relationship between C and assembly. I got a little confused by the proliferation of different toolchains for C compilation on Windows, but I followed the recommendation of the C/C++ extension for VSCode and used MinGW.
 
-I also updated my installation of Ghidra. The NSA made some significant improvements to the UI since I last updated, including adding support for color schemes. My eyes are very grateful. Ghidra dark mode actually looks nice. Although the ridiculous gradient at the top is still there, and the icons still look like they're from the stone age.
-### Chapter 1: Getting Started
+I also updated my installation of Ghidra, which was the main tool I used. It shows the assembly for the application in a readable format, and supports decompilation to C and other analysis. The NSA made some significant improvements to the UI since I last updated, including adding support for color themes. My eyes were very grateful. I also used IDA, which is similar to Ghidra. I used it for dynamic analysis (debugging) since setting that up in Ghidra is difficult. I mainly used Ghidra because I'm more familiar with it.
+### Getting Started
 
-When I ran lotto.exe, it opened a window and waited for me to enter a value.
+Lotto.exe is a GUI based application in the Windows Portable Executable (PE) format. In it, you can enter the number for a lottery, and the application will tell you if you have the winning number. The goal is to enter the winning ticket and recieve the flag as a reward. In order to figure out what number is the winning one, I needed to dig into the code.
 
-![[Pasted image 20231209172453.png]]
+The app looks like this:
+
+![](Images/Pasted%20image%2020231215170633.png)
 
 When I entered a value, it said "you cannot buy a lotto ticket without money"
 
-![[lotto1.png]]
+![](Images/Pasted%20image%2020231215170638.png)
 
-I didn't how I was supposed to get money. I tried entering a command line argument when launching the application, but it didn't do anything. It was time to look at the file.
+I didn't how I was supposed to get money. This text box is the only way of interacting with the app. I tried entering a command line argument when launching the application, but it didn't do anything.
 
-The bulk of this challenge was looking through the application in Ghidra and puzzling it out. I needed to figure out what value to enter in order to get the flag, based on its' inner workings.
+I imported the file into Ghidra and got a description of the file. The only noteworthy info was that the compiler is visualsutdio:unknown, which indicates that the app was compiled with Microsoft Visual Studio. Visual Studio is used to compile C and C++ code for Windows. I wanted to know whether the app was programmed in C or C++ but it turns out it's not trivial to determine that. You have to look for hints like artifacts from C++ objects and C++ name mangling. I didn't see any of that, so I came to the conclusion that lotto is a C program. Not that it matters much. It always decompiles to C. You can even decompile programs written in languages not in the C family as long as they're compiled.
 
-I imported the file into Ghidra and got a description of the app. The only noteworthy info was that the compiler is visualsutdio:unknown, which indicates that the app was compiled with Microsoft Visual Studio. Visual Studio is used to compile C and C++ code for Windows. It's actually not trivial to identify whether the source code is from C or C++. There can be artifacts from C++ objects, and other hints like name mangling. I think lotto was written in C, but I'm not certain.
+I opened lotto.exe in the code viewer and clicked "analyze" which decompiled it into C. This is what it looks like in Ghidra:
 
-I opened lotto.exe in the code viewer, and analyzed the code, which decompiled it into C. This is what it looks like in Ghidra;
+![](Images/Pasted%20image%2020231215171447.png)
 
-![[Pasted image 20231209180110.png]]
+Assembly is on the left and decompiled code is on the right. Selecting elements on either side will highlight the corresponding element (if there is one) on the other side. The highlight feature is helpful, but not very reliable.
 
-Data and instructions are on the left, and code is on the right. Selecting elements on either side will highlight the corresponding element (if there is one) on the other side.
+As I was looking through the file I was struck by how big it is. It spans 37,544 memory addresses. Of course, most of them weren't relevant to solving the challenge. Otherwise this would have been impossible. The majority of the file is comprised of functions. The functions range in size from more than a hundred lines to a single line. 
 
-I found it hard to read the text, so I changed the font, colors, and font size. While Ghidra's menus are often unintuitive, the customization options are surprisingly in-depth.
+One of the things which makes reverse engineering hard is that compilation is a lossy process. Most variable and function names, program flow, most comments, and other features of the source code are gone. This means that for each function, I had to look at what was happening in it and reason about it's purpose or role in the program.
 
-![[Pasted image 20231209184155.png]]
-
-Lotto.exe is pretty big. It spans 37,544 memory addresses, but luckily most of them aren't relevant to solving the challenge. The majority of the file is comprised of functions. There are some "Thunk functions" which are used as proxies or helpers for other functions. Most of the functions are not thunk functions, and they have anywhere from a few lines of decompiled C to hundreds of lines. Most of the variable names and all of the comments from the source code are lost in compilation, so there isn't much to work with to figure out what functions do. I had to look at what the code is doing and work backwards to determine what the program is doing as a whole. Hence "reverse" engineering.
-
-The first function in the file is `entry`, which is the top level function of the application. All of the other functions are unnamed and Ghidra gives them names like FUN_0040204c. I used the symbol tree to confirm that there are in fact, a *lot* of functions.
-
-![[toomanyfunctions.png]]
-
-I took a cursory look at many of the functions and determined that most seem to fall into three categories:
+The first function in the file is `entry`, which is the top level function of the application. All of the other functions are unnamed and Ghidra gives them names like `FUN_0040204c`. I used the symbol tree to confirm that there are in fact, quite a few functions. Around 150. I took a cursory look at many of the functions and determined that most fall into three categories:
 
 - Program logic
 - GUI and IO
 - Memory management
 
-I was concerned with the logic of the program and not the other elements, so part of the task of reverse engineering was identifying which functions I did or didn't need to care about. A good way of going about this is top-down analysis. By starting at the entry function which governs the overall functionality of the application and recursively analyzing the functions called in it, I could puzzle out the application.
+I was concerned with the logic of the program and not the other elements, so part of the challenge was to find which functions governed the logic. The method I used was top-down analysis. I started at the `entry` function and recursively analyzed the functions called in it.
 
-Breaking down the entry function shows 3 main parts. Setup, a main loop, and cleanup. Here's the setup part with comments added explaining what I think each part is doing:
-
-```C
-void entry(void)
-
-{
-  int iVar1;
-  undefined8 uVar2;
-  int iVar3;
-  int iVar4;
-  UINT uExitCode;
-  
-  memset(&DAT_0040ad88,0,0x20); //Memory stuff
-  DAT_0040ad8c = GetModuleHandleW((LPCWSTR)0x0);
-  DAT_0040ad88 = HeapCreate(0,0x1000,0);
-  
-  FUN_004075a0(); //I have no idea what these do
-  ... //more unnamed functions with no parameters, which I excerpted for brevity
-  DAT_0040ada0 = 0;
-  DAT_0040ad90 = 0x7a6a;
-  FUN_00403008((LPVOID *)&DAT_0040ada4,(undefined4 *)&DAT_0040a0f2);
-  _OOBECompleteWnfQueryCallback@28((HWND__)0x0,0,0,0x142,0x56,u_Lotto!_0040a0e4,0xc80001);
-  //Given that the above line contains the text that appears in window, this probably creates the window
-  FUN_0040363f((HWND)0x1,8,10,0x132,0x14,(LPCWSTR)&DAT_0040a020,0x2000);
-  FUN_004039bb((HWND)0x3,8,0x23,0xce,0x28,u_Enter_a_lotto_number!_0040a0b8);
-  //And this line sets the initial state of the text box which asks you to enter a number
-```
-
-Here's the main loop:
+`entry` has a main loop where the meat and potatos of the app are. Here's the loop, with comments describing what I thought each part did when first going through it.
 
 ```C
   do {
     DAT_0040ad9c = FUN_004042fc();
     if (((DAT_0040ad9c == 0x332c) && (iVar1 = FUN_00405bf3(), iVar1 == 1)) &&
-        (iVar1 = FUN_00405c02(), iVar1 == 0x300)) { //I don't know what this does, but it involves DAT_0040ad9c which is what determines whether the loop continues
-      if (DAT_0040ada0 == 0) { //This checks if I have no money, and denies me from entering a lottery ticket
+        (iVar1 = FUN_00405c02(), iVar1 == 0x300)) {
+      if (DAT_0040ada0 == 0) { //blocks you from entering a ticket if money = 0
          FUN_004039db((int *)0x3,u_You_cannot_buy_a_lotto_ticket_wi_0040a060);
       }
       else {
@@ -87,10 +53,10 @@ Here's the main loop:
          FUN_00403a26((int *)0x1,DAT_0040afcc);
          FUN_00407620(&DAT_0040ad98,iVar1);
          uVar2 = FUN_00402000(DAT_0040ad98);
-         if ((int)uVar2 == 0) { //This function checks if the lotto number is correct or not
-           FUN_004039db((int *)0x3,u_Those_are_not_winning_numbers._0040a022); //And this one sets the text to display "Those are not the winning numbers"
+         if ((int)uVar2 == 0) { //This checks if the lotto number is correct or not
+           FUN_004039db((int *)0x3,u_Those_are_not_winning_numbers._0040a022);
          }
-         else { //This stuff happens if the lotto number is correct. It displays the flag, which is encoded so I can't just read it from the file
+         else { //Displays the flag, which is encoded somehow
            iVar1 = DAT_0040afcc;
            iVar3 = DAT_0040afcc;
            iVar4 = DAT_0040afcc;
@@ -103,23 +69,10 @@ Here's the main loop:
          }
       }
     }
-  } while (DAT_0040ad9c != 0x333c); //This variable is set at the start of the loop to the output of FUN_004042fc(), then checked in the following if statement
+  } while (DAT_0040ad9c != 0x333c); //determines whether the loop continues
 ```
 
-An important tool in reverse engineering is to give variables descriptive psudonyms. As I worked, I changed the names of variables to reflect my understanding of them. For instance, I renamed `DAT_0040ad9c` to `main_loop_value` because it detemines if the program keeps looping. I also renamed `FUN_004039db` to `display_text` since it decides which text shows in the app.
-
-Here's after the loop:
-
-```C
-  uExitCode = 0; //Means the proccess exits successfully
-  FUN_00401220();
-  FUN_004075f0();
-  HeapDestroy(DAT_0040ad88);
-                      /* WARNING: Subroutine does not return */
-  ExitProcess(uExitCode);
-```
-
-I went into each function and renamed many of them based on what I thought they did. Here's the current state of `entry`:
+An important tool in reverse engineering is to give variables descriptive names. As I worked, I changed the names of variables to reflect my understanding of them. For example, I renamed `DAT_0040ad9c` to `main_loop_value` because it detemines if loop continues and I renamed `FUN_004039db` to `display_text` since it displays text. I went into each function and gave most of them descriptive names.
 
 ```C
 ...
@@ -132,7 +85,7 @@ I went into each function and renamed many of them based on what I thought they 
   tls_alloc_proxy();
   make_heap_2();
   heap_stuff?();
-  ???();
+  heap_stuff_2();
   windows_stuff();
   load_assets();
   more_initialization();
@@ -153,8 +106,8 @@ I went into each function and renamed many of them based on what I thought they 
          iVar1 = int_1;
          FUN_00403a26((int *)0x1,int_1);
          FUN_00407620(&DAT_0040ad98,iVar1);
-         uVar2 = FUN_00402000(DAT_0040ad98);
-         if ((int)uVar2 == 0) {
+         target = check_lotto(DAT_0040ad98);
+         if ((int)target == 0) {
            display_text((int *)0x3,u_Those_are_not_winning_numbers._0040a022);
          }
          else {
@@ -171,51 +124,46 @@ I went into each function and renamed many of them based on what I thought they 
       }
     }
   } while (main_loop_value != 0x333c);
-  uExitCode = 0;
-  FUN_00401220();
-  FUN_004075f0();
-  HeapDestroy(DAT_0040ad88);
-                      /* WARNING: Subroutine does not return */
-  ExitProcess(uExitCode);
-}
 ```
 
-I figured out why I was getting the message "You cannot buy a lotto ticket with no money". The money_amount variable is set to 0, then checked if it's equal to 0. These are the only two places where the variable is referrenced, so it's impossible to satisfy this requirement.
+At this point, I realized why I was getting the message "You cannot buy a lotto ticket with no money". The `money_amount` variable is set to 0. `money_amount` is only written to once, so seemed like it would be impossible to satisfy this requirement.
 
-Luckily, Ghidra allows me to patch the instructions, so I was able to remove the requirement. 
+Luckily, Ghidra can patch the instructions and change the code.
 
-![[Pasted image 20231210194230.png]]
+![](Images/Pasted%20image%2020231215174252.png)
 
-As shown above, I can modify the assembly where the value is set to 0 to set it to whatever I want. I get this strange message upon clicking "Patch instruction" though. 
+As shown above, I modied the assembly where `money_amount` is set to 0 to set it to 200 instead. I got a strange popup upon clicking "Patch instruction" (shown below). I'm not sure what my processor has to do with encountering errors when patching, but I am obviously no expert.
 
-![[Pasted image 20231210194353.png]]
+![](Images/gold.png)
 
-I exported and ran the patched exe and when I enter a number, I get a different message than before. The patch worked!
+I exported and ran the patched file. When I entered a number, I got a different message than before. The patch worked!
 
-![[Pasted image 20231210195228.png]]
+![](Images/gold2.png)
 
-Having seen that I can patch the app, I decided I should try patching it to give me the flag. I expected it not to work. It would be too easy if this were the whole challenge.
+With a successful path under my belt, I decided to try patching the app to just give me the flag. I didn't expect it to work, though. It would be too easy.
 
-The if statement which checks for the correct value uses the instruction JZ which means "Jump if Zero". I changed JZ to JNZ which jumps if not zero. This inverts the if statement, so it should give me the flag if I get the lotto number wrong. 
+The if statement which checks if the lotto number is correct uses the instruction JZ which means "Jump if Zero". I changed JZ to JNZ which jumps if not zero. The patch inverted the if statement, so it should print the flag if I get the lotto number wrong. 
 
 The patched instructions:
 
-![[Pasted image 20231210205336.png]]
+![](Images/Pasted%20image%2020231215175726.png)
 And the new decompiled code, which has the if statement inverted:
 
-![[Pasted image 20231210203851.png]]
+![](Images/Pasted%20image%2020231215175731.png)
 
-But did it work?
+Did it work?
 
-Nope. Of course it's not that easy. Entering a number in the modified lotto.exe gives me gibberish. When I entered a second number, it crashed.
+Nope. Of course it's wouldn't be that easy. Entering a number in the modified app caused it to print gibberish. When I entered a second number, it crashed.
 
-![[Pasted image 20231210201511.png]]
+![](Images/Pasted%20image%2020231215175818.png)
 
-As I suspected, the process which outputs the flag uses the input in some way. Which means that the input must be correct in order for the flag to be revealed.
+As I suspected, the process which outputs the flag uses the input, so it must be correct for the flag to be revealed.
 
-### Chapter 2: The Hard Part
+### The Hard Part
 
-Whether because of the decompilation process or the nature of C code (and my limited knowledge of the language), many of the functions are difficult to understand.
+This part of the writeup is less step-by-step because I took a while to meander around the code and slowly build up my understanding. Instead of documenting in detail, I'll give examples of the challenges I faced deciphering the app.
+
+Whether because of the decompilation process or the nature of C code (and my limited knowledge of the language), many of the functions were difficult to understand. For example, the following function returns a void pointer containing the memory address of allocated memory in the heap. It casts the function pointer param_2 to the code type if it isn't a null pointer, then executes the function it points to with the pointer to the heap as a parameter. Not the most intuitive, I think.
 
 ```C
 LPVOID FUN_00406f3a(SIZE_T param_1,undefined *param_2)
@@ -230,13 +178,11 @@ LPVOID FUN_00406f3a(SIZE_T param_1,undefined *param_2)
 }
 ```
 
-For example, this function returns a void pointer containing the memory address of allocated memory in the heap. It casts the function pointer param_2 to the code type if it isn't a null pointer, then executes the function it points to with the pointer to the heap as a parameter.
+The C compiler makes optimizations which can make for strange C code when decompiled. For instance, an allocation on the stack may be used multiple times for different purposes, which gets decompiled to a local variable which is assigned and read multiple times for entirely unrelated purposes. In `entry`, as shown below, the variable `iVar1` is assigned and read multiple times for totally unrelated purposes.
 
-The C compiler makes optimization which make for strange C code when decompiled. For instance, an allocation on the stack may be used multiple times for different purposes, which gets decompiled to a local variable which is assigned and read multiple times for entirely unrelated purposes, which is not very readable code. In entry, as shown below, the variable iVar1 is assigned and read multiple times for totally unrelated purposes.
+![](Images/Pasted%20image%2020231215180231.png)
 
-![[Pasted image 20231212203320.png]]
-
-I've been moving recursively through functions in the entry function and functions inside those functions, and trying to puzzle out what they're doing and especially what global variables are used for. For instance, I found one global variable which is repeatedly used in memory related functions and I determined that it's a pointer to an allocated section on the heap. These memory management functions and variables probably aren't useful to me, but it's hard to tell at a glance.
+One of the things I did was figure out what each of the global variables (shown in dark green in Ghidra screenshots) are used for. Often I had to look at multiple functions using the same variable to do so. For instance, I found one global variable which is repeatedly used in memory related functions and I determined that it's a pointer to an allocated section on the heap.
 
 
 
@@ -317,7 +263,7 @@ The highlighted `JNZ` (jump if not zero) instruction isn't represented in the co
 Code breakdown.
 `MOV EBX, int_1` copies the value from int_1 onto the general purpose `EBX` register. `CMP` compares the value of `int_1` in the `EBX` register and `DAT_0040ad90`, one of the global variables. If they're the same, the Zero Flag (ZF) is set to 1, othersize it's set to 0. Then `JNZ` checks the flag and jumps to LAB_00402037 if it's 1. The result is that the function has an if/else functionality with two branches. They simply set int_1 to 0 or to 1. This is the value that I think ends up getting returned, and represents whether the lotto number was correct or not.
 
-![[Pasted image 20231215072758.png]]
+![](Images/Pasted%20image%2020231215164931.png)
 
 
 I'm still figuring out what the function in the last segment is doing. It's the one which uses fastcall to use the registers directly.
@@ -370,34 +316,33 @@ JNZ       LAB_00402037
 _jumps if ZF is not 0_
 
 MOV       int_1,0x1
-
+_sets int_1 (the return value) to 1, indicating a match_
 
 JMP       LAB_0040203d
-
+_goes to end of function_
 
 LAB_00402037
 XOR       int_1,int_1
-
+_zeroes int_1_
 
 JMP       LAB_0040203d
-
-
+_goes to end of function_
 
 LAB_0040203d
 PUSH      dword ptr [ESP]=>pointer_to_string_on_heap
+_sets up pointer to string as a parameter_
 
-
-CALL      concat_edx_and_eax_and_free_heap
-
+CALL      free_heap
+_frees the allocated memory for the string_
 
 ADD       ESP,0x8
-
+_shinks stack_
 
 POP       EBX
-
+_retrieves this from storage at the start of the function_
 
 RET       0x4
-
+_returns with int_1 in EAX
 
 
 
@@ -406,7 +351,7 @@ Oh my god why didn't I read the friggin assembly this makes so much more sense.
 
 Also shoutout to ChatGPT, this would have been impossible without it's insights. It's remarkably able to break down what assembly code or unreadable C code is doing, and while it's insights often lack depth, being able to throw tens of functions at it and get a quick analysis of what they probably do helped me to narrow down which functions I needed to pay special attention to, as well as figure out what's generally going on in this app. I think the future of human programmers assisted by AI is bright. Although perhaps one day it will get too good and replace us. One can only wonder what a society would do with unlimited programmers though. Every man could be a game developer. I would be out of a job, but society would surely be very different. Good thing I know how to do some construction.
 
-![[Pasted image 20231215155935.png]]
+![](Images/Pasted%20image%2020231215164827.png)
 
 Dynamic analysis in IDA.
 
@@ -449,7 +394,6 @@ int main() {
 
 HOLY SHIT
 
-![[Pasted image 20231215162911.png]]
 ![](Images/Pasted%20image%2020231215163935.png)
 
 
