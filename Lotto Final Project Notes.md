@@ -450,6 +450,6 @@ int main() {
 HOLY SHIT
 
 ![[Pasted image 20231215162911.png]]
+![](Images/Pasted%20image%2020231215163935.png)
 
-![](Pasted%20image%2020231215163635.png)
 
