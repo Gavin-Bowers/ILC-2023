@@ -147,6 +147,7 @@ The if statement which checks if the lotto number is correct uses the instructio
 The patched instructions:
 
 ![](Images/Pasted%20image%2020231215175726.png)
+
 And the new decompiled code, which has the if statement inverted:
 
 ![](Images/Pasted%20image%2020231215175731.png)
@@ -240,7 +241,7 @@ I then mostly understood how the function works. `MOV EBX, int_1` copies the val
 
 ![](Images/Pasted%20image%2020231215164931.png)
 
-### I figured everything out. Here's the line-by-line
+### I figured it out. Here's what each line does
 
 PUSH      EBX      
 _saves a value from the calling function for later_
@@ -361,13 +362,13 @@ One it ran it, it became obvious that I didn't need to write this. Swapping the 
 
 ![](Images/Pasted%20image%2020231215190100.png)
 
-I was hoping that this would work and I would finally be done, but alas, it didn't work. I didn't know what I was doing wrong. In desperation, I turned to IDA and used the debugger to try to see what was going on. It confirmed that my understanding of the code was correct, but the value I had was wrong. I double checked the logic and it seemed to be correct. I was still stumped. Finally, I read through the code again and realized... _I entered the wrong value for the constant._ Some things never change, huh?
+I was hoping that this would work and I would finally be done, but alas, it didn't work. I didn't know what I was doing wrong. In desperation, I turned to IDA and used the debugger to try to see what was going on. It confirmed that my understanding of the code was correct, but the value I had was wrong. I double checked the logic and it seemed to be correct. I was still stumped. Finally, I read through the code again and realized... _I entered the wrong value for the constant._ Classic programmer error.
 
 The IDA debugger (actually the best of any debugger I've used so far):
 
 ![](Images/Pasted%20image%2020231215164827.png)
 
-With my newly correct value, I tentatively entered it, ready to give up if it didn't work. 
+I tentatively entered my new value...
 
 It worked!
 
