@@ -184,38 +184,12 @@ The C compiler makes optimizations which can make for strange C code when decomp
 
 One of the things I did was figure out what each of the global variables (shown in dark green in Ghidra screenshots) are used for. Often I had to look at multiple functions using the same variable to do so. For instance, I found one global variable which is repeatedly used in memory related functions and I determined that it's a pointer to an allocated section on the heap.
 
+As days went by, the satisfaction of gaining understanding of the app was replaced by growing frustration with the elements I still did not understand. Eventually, I would break through the hurtles and sometimes moments of realization felt like ephiphanies. I finally grasped the entirety of how pointers work, after using C for multiple years here and there.
 
-
-One of the rabbit holes I went down is figuring out what the `heap_pointer` variable is being used for in `entry`.  The first if statement in the main loop is:
-
-```C
-    if (((main_loop_value == 0x332c) && (iVar1 = get_first_in_list(), iVar1 == 1)) &&
-        (iVar1 = FUN_00405c02(), iVar1 == 0x300)) {
-```
-
-In which there are 3 checks which must pass to go on to the other if statements, otherwise it just loops again. `main_loop_value` seems to check for a specific value from the application window data, and the last check does the same for a function which I haven't analyzed yet. The one which I went deep into was the second condition, which needs to be equal to 1. (function names have been changed to reflect my understanding of them). The function `get_first_in_list` uses the global variable `heap_pointer`, which stores the address of an allocated section on the heap, containing a data structure. I think it's a list or an array. `return_value_unchanged` just returns the parameter it's given. I'm not sure why it's used. Maybe something to do with how global variables work. Then pointer arithmetic is used to ad 0x18 to the address, and the resulting address is dereferenced to get the value there.
+The most important function in lotto.exe beside `entry` is `check_lotto`, which determines if the program displays "those are not the winning numbers" or attempts to display the flag. Unfortunately for me, this function has numerous features which I couldn't make heads or tails of.
 
 ```C
-undefined4 get_first_in_list(void)
-
-{
-  int iVar1;
-  
-  iVar1 = return_value_unchanged(heap_pointer);
-  return *(undefined4 *)(iVar1 + 0x18);
-}
-```
-
-In order to figure out what `heap_pointer` was I looked at the 8 places in the app where it's referrenced. These were all in different functions, which had code related to the heap, memory management, or data structures. I'm still not sure what the list is actually used for, but it's probably important.
-
-Schizo Ramblings
-
-WHAT does CONCAT44 do?
-
-One of the most important functions is probably is_correct_lotto, which determines if the program displays "those are not the winning numbers" or proceeds. However, this function has a number of elements which make no sense.
-
-```C
-undefined8 is_correct_lotto(undefined4 *String) {
+undefined8 check_lotto(undefined4 *String) {
   undefined4 extraout_ECX;
   undefined4 extraout_EDX;
   undefined8 int_1;
@@ -233,9 +207,9 @@ undefined8 is_correct_lotto(undefined4 *String) {
 }
 ```
 
-This function takes a pointer to the string which is taken from the text input box in the app. It makes a copy of the string on the heap, and uses that copy to find the value of the string as a number. It makes a copy of the number in int_2. This is one of the things that doesn't make sense. int_2 gets passed to a function which rearranges the bytes in it, but the return value isn't used. What's the point.
+This function takes a pointer to the string which is taken from the text input box in the app. It makes a copy of the string on the heap, and uses that copy to find the value of the string as a number. It makes a copy of the number in `int_2`, which gets passed to a function that rearranges the bytes in it. However, `int_2`is never used or returned. I was baffled by this.
 
-The second thing is that extraout_ECX and EDX are passed to FUN_00407a0 without being initialized, and furthermore, they aren't even used in the function they're passed to.
+Additionally, `extraout_ECX` and `extraout_EDX` are passed to `FUN_00407a0` without being initialized, and furthermore, they aren't even used in the function they're passed to. This is the function in question:
 
 ```C
 undefined8 __fastcall FUN_004076a0(undefined4 param_1,undefined4 param_2,LPVOID param_3)
@@ -248,25 +222,23 @@ undefined8 __fastcall FUN_004076a0(undefined4 param_1,undefined4 param_2,LPVOID 
 }
 ```
 
-I learned how extraout variables work. They represent values in registers being passed to a function with the fast-call convention. This is probably the result of a compiler optimization, because god forbid anyone write C like this. I'm not sure why it didn't just inline the function though...
+`CONCAT44` doesn't link to a function, but it's also not marked as an external function. I looked it up and it apparently concatenates two 32 bit values (44 I guess is for 4 bytes + 4 bytes). `param_2` and `in_EAX` are still uninitialized, though.
 
-CONCAT44 is a Ghidra macro, which represents the operation of concatenating two 32 bit values, in this case, the EDX and EAX registers, to make a 64 bit value. (The 8 in undefined8 is 8 bytes, which is also called a quad word (a word is 16 bits)). The EAX register has the value of int_2 which had it's bytes rearranged since it was placed on EAX earlier. The other value is param_2 which is EDX
+I realized that while the other functions are `__stdcall`, this one is `__fastcall`, meaning it takes values on registers as parameters. That explained why the variables going uninitialized were named after registers. I still didn't understand this and the `check_lotto` function, however.
 
-Ugh I don't know which values are actually on those registers because multiple functions in is_lotto_correct use them
+I didn't know which values are being concatenated because those registers are used in multiple functions in `check_lotto`. At this point, I had avoided looking at the assembly in favor of the decompiled C. I barely knew what the instructions did and how they interacted, especially with the stack and parameters and such. I studied up on it, and found that there was a whole treasure trove of information I was ignoring. I realized that `CONCAT44` simply returns the values for `int_1` to the registers it's stored on in check_lotto, since those registers are used in the function and `int_1` is stored on the stack in the meantime. It isn't used in this function, but it needs to get passed anyway to preserve it. In the assembly, you can see EAX and param_2 (EDX) get pushed onto the stack and popped off of it at the end.
 
-I wasn't able to understand what is_correct_lotto was doing. It returns a value which seems to be 0 if the lotto number entered is wrong and something other than 0 if the number is correct. But it's behavior doesn't line up with that. It seems to just convert to int, shuffle some bits, and then append something else to it. Turns out, there's a conditional jump in the assembly for is_correct_lotto!! Apparently sometimes the decompiler just doesn't work correctly and skips over stuff like this. I realize that writing a decompiler is very hard but this is awful. I've been trying to avoid having to read the assembly because I'm not very good at it but I'm coming to the realization that it's mandatory for this.
+![](Images/Pasted%20image%2020231215184751.png)
 
-![[Pasted image 20231215065752.png]]
+I still wasn't able to understand how `check_lotto` worked. It returns 1 if the lotto number entered is right and 0 otherwise. But it's behavior doesn't line up with that. It seems to just convert to int, shuffle some bits, and then append something else to it. It didn't add up.
 
-The highlighted `JNZ` (jump if not zero) instruction isn't represented in the control flow of the function in C. 
+It turned out, there is a conditional jump in the assembly for check_lotto!! Apparently sometimes the decompiler just doesn't work correctly and skips over stuff like this. I realize that writing a decompiler is very hard but this was very confusing and frustrating. The highlighted `JNZ` instruction below wasn't represented in the control flow of this function in C. 
 
-Code breakdown.
-`MOV EBX, int_1` copies the value from int_1 onto the general purpose `EBX` register. `CMP` compares the value of `int_1` in the `EBX` register and `DAT_0040ad90`, one of the global variables. If they're the same, the Zero Flag (ZF) is set to 1, othersize it's set to 0. Then `JNZ` checks the flag and jumps to LAB_00402037 if it's 1. The result is that the function has an if/else functionality with two branches. They simply set int_1 to 0 or to 1. This is the value that I think ends up getting returned, and represents whether the lotto number was correct or not.
+![](Images/Pasted%20image%2020231215184657.png)
+
+I then mostly understood how the function works. `MOV EBX, int_1` copies the value from int_1 onto the general purpose `EBX` register. `CMP` compares the value of `int_1` in the `EBX` register and `DAT_winning_lotto`, a self-explanatory global variable. If they're the same, the Zero Flag (ZF) is set to 1, othersize it's set to 0. Then `JNZ` checks the flag and jumps to `LAB_00402037` if it's 1. The result is that the function has an if/else functionality with two branches. The branches set `int_1` to 0 or 1 respectively. This value is returned and represents whether the lotto number was correct or not.
 
 ![](Images/Pasted%20image%2020231215164931.png)
-
-
-I'm still figuring out what the function in the last segment is doing. It's the one which uses fastcall to use the registers directly.
 
 ### I figured everything out. Here's the line-by-line
 
@@ -344,19 +316,16 @@ _retrieves this from storage at the start of the function_
 RET       0x4
 _returns with int_1 in EAX
 
+### Home Stretch
 
+At this point I had a good idea of what number I needed to enter. The number would need to be equal to another global variable - which is 7a6a in hex - after having it's bytes rearranged. The rearrange function swaps the bytes in the number such that bytes a,b,c,d become c,d,a,b.
 
+```C
+  return (int)(char)param_1 << 0x10 | (param_1 >> 0x18) << 8 | (param_1 << 8) >> 0x18 |
+         ((param_1 << 0x10) >> 0x18) << 0x18;
+```
 
-Oh my god why didn't I read the friggin assembly this makes so much more sense.
-
-Also shoutout to ChatGPT, this would have been impossible without it's insights. It's remarkably able to break down what assembly code or unreadable C code is doing, and while it's insights often lack depth, being able to throw tens of functions at it and get a quick analysis of what they probably do helped me to narrow down which functions I needed to pay special attention to, as well as figure out what's generally going on in this app. I think the future of human programmers assisted by AI is bright. Although perhaps one day it will get too good and replace us. One can only wonder what a society would do with unlimited programmers though. Every man could be a game developer. I would be out of a job, but society would surely be very different. Good thing I know how to do some construction.
-
-![](Images/Pasted%20image%2020231215164827.png)
-
-Dynamic analysis in IDA.
-
-I entered 1. The number 1 is correctly placed onto EAX by string_to_int. Then it gets rearranged and becomes: ![[Pasted image 20231215162050.png]]
-
+I wrote this program to find the value by brute force since I wasn't sure how to program the byte swapping the opposite way and this was easier.
 
 ```C
 #include <stdio.h>
@@ -369,31 +338,43 @@ uint32_t rearrange_bytes(uint32_t param_1) {
            ((param_1 << 16) >> 24) << 24; //c -> a
 } //a,b,c,d -> c,d,a,b
 
-
 int main() {
     uint32_t target = 0x7a6a;
     uint32_t found = 0;
     uint32_t test;
-
     for (test = 0; test <= 0xFFFFFFFF; test++) {
         if (rearrange_bytes(test) == target) {
             found = test;
             break;
         }
     }
-
     if (found != 0) {
         printf("Found matching integer: 0x%08X (decimal: %u)\n", found, found);
     } else {
         printf("No matching integer found.\n");
     }
-
     return 0;
 }
 ```
 
-HOLY SHIT
+One it ran it, it became obvious that I didn't need to write this. Swapping the bytes is as easy as shuffling them around. Well, I did need it to convert to decimal since I can't enter the number as hex. Interestingly, the number parsing function does allow hex, but it must be preceded by a $ and the textbox only allows numbers. Also, this ended up being the only thing I used C for funnily enough.
 
-![](Images/Pasted%20image%2020231215163935.png)
+![](Images/Pasted%20image%2020231215190100.png)
 
+I was hoping that this would work and I would finally be done, but alas, it didn't work. I didn't know what I was doing wrong. In desperation, I turned to IDA and used the debugger to try to see what was going on. It confirmed that my understanding of the code was correct, but the value I had was wrong. I double checked the logic and it seemed to be correct. I was still stumped. Finally, I read through the code again and realized... _I entered the wrong value for the constant._ Some things never change, huh?
 
+The IDA debugger (actually the best of any debugger I've used so far):
+
+![](Images/Pasted%20image%2020231215164827.png)
+
+With my newly correct value, I tentatively entered it, ready to give up if it didn't work. 
+
+It worked!
+
+![](Images/Pasted%20image%2020231215191202.png)
+
+### Reflection
+
+I spent a week doing this and little else. It was demoralizing at times, and I had to resist the urge to give up. I knew it would be a challenge going in as a relative beginner, and it was. I'm glad I stuck with it, both to get credit, and for the personal growth and accomplishment.
+
+In retrospect, the challenge seems not too difficult. The relevant code wasn't very complex. I feared it would be much worse. Rather, the challenge came mostly from sifting through the heaps of functions to find the relevant ones. I also was afraid that If I totally neglected to understand the memory management functions, I would have issues. That ended up not being a problem, but in a harder challenge it could have been. The other reason it seems easier in retrospect in that I learned a lot about C and assembly doing this. I'm a lot more capable at reverse engineering and low-level programming than when I started.
